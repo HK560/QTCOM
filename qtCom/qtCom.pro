@@ -16,10 +16,11 @@ SOURCES += \
     src/mainwindow.cpp
 
 HEADERS += \
-    src/ListenPortThread.h \
-    src/com.h \
-    src/comportinfo.h \
-    src/mainwindow.h
+    include/ListenPortThread.h \
+    include/com.h \
+    include/comportinfo.h \
+    include/mainwindow.h
+
 
 FORMS += \
     forms/mainwindow.ui
