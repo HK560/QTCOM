@@ -18,8 +18,10 @@ SOURCES += \
 HEADERS += \
     include/ListenPortThread.h \
     include/com.h \
-    include/comportinfo.h \
-    include/mainwindow.h
+    include/mainwindow.h \
+    include/comportinfo.h
+    
+INCLUDEPATH += \include
 
 
 FORMS += \

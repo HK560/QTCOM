@@ -1,4 +1,4 @@
-#include "com.h"
+#include "include/com.h"
 using namespace MCOM;
 
 COM::COM() {
@@ -18,7 +18,6 @@ bool COM::OpenPort() {
         if (serialPort->open(QIODevice::ReadWrite)) {
             qDebug() << "open port:" << serialPort->portName()
                      << serialPort->isOpen();
-            // QMessageBox::information(NULL,tr("信息"),tr("打开端口成功"),QMessageBox::Ok);
             return true;
         };
     }
@@ -55,6 +54,7 @@ bool COM::ClosePort() {
         if (portReady) {
             serialPort->close();
             portReady = false;
+            qDebug()<<"串口关闭成功";
             return true;
         } else {
             QMessageBox::warning(NULL, tr("错误"), tr("端口未开启"),
@@ -106,12 +106,7 @@ void COM::errorHandle(QSerialPort::SerialPortError error) {
 
 
 void COM::SendDataToMainwindow(){
-    QByteArray dataBuffer = serialPort->readAll();
-    
-    // QString dataString = dataBuffer;
-    // QTextCodec *tc =QTextCodec::codecForName("GBK");
-    // dataString = tc->toUnicode(dataBuffer);
-    // qDebug() << "SendDataToMainwindow : " <<dataBuffer <<dataString;
+    QByteArray dataBuffer = serialPort->readAll(); 
     emit ReceiveData(dataBuffer);
     return;
 }

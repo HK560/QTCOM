@@ -6,39 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
-    <height>426</height>
+    <width>549</width>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QComboBox" name="comPortSelect">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>72</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="bandSelect">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>20</y>
-      <width>72</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="openPortBtn">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>20</y>
+      <x>380</x>
+      <y>170</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -50,8 +30,8 @@
    <widget class="QCheckBox" name="hexCheckBox">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>110</y>
+      <x>220</x>
+      <y>230</y>
       <width>111</width>
       <height>22</height>
      </rect>
@@ -63,8 +43,8 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>340</y>
+      <x>50</x>
+      <y>270</y>
       <width>261</width>
       <height>23</height>
      </rect>
@@ -73,8 +53,8 @@
    <widget class="QTextEdit" name="logEdit">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>80</y>
+      <x>30</x>
+      <y>0</y>
       <width>301</width>
       <height>231</height>
      </rect>
@@ -83,8 +63,8 @@
    <widget class="QPushButton" name="sendBtn">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>340</y>
+      <x>340</x>
+      <y>270</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -97,7 +77,7 @@
     <property name="geometry">
      <rect>
       <x>380</x>
-      <y>70</y>
+      <y>210</y>
       <width>80</width>
       <height>24</height>
      </rect>
@@ -106,13 +86,121 @@
      <string>刷新</string>
     </property>
    </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>0</y>
+      <width>158</width>
+      <height>164</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_7">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="portName">
+           <property name="text">
+            <string>串口名</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comPortSelect"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="baud">
+           <property name="text">
+            <string>波特率</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="bandSelect"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="stopBits">
+           <property name="text">
+            <string>停止位</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="stopBitsSelect"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="databits">
+           <property name="text">
+            <string>数据位</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="dataBitsSelect"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QLabel" name="flowControl">
+           <property name="text">
+            <string>流控制</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="flowControlSelect"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QLabel" name="parity">
+           <property name="text">
+            <string>校验位</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="paritySelect"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>507</width>
+     <width>549</width>
      <height>21</height>
     </rect>
    </property>
