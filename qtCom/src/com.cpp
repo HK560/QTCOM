@@ -4,7 +4,8 @@ using namespace MCOM;
 COM::COM() {
     serialPort = new QSerialPort();
     connect(serialPort, &QSerialPort::errorOccurred, this, &COM::errorHandle);
-    connect(serialPort,&QSerialPort::readyRead,this,&COM::SendDataToMainwindow);
+    connect(serialPort, &QSerialPort::readyRead, this,
+            &COM::SendDataToMainwindow);
 }
 
 COM::~COM() { delete serialPort; }
@@ -21,7 +22,7 @@ bool COM::OpenPort() {
             return true;
         };
     }
-    QMessageBox::warning(NULL, tr("信息"), tr("打开端口失败"), QMessageBox::Ok);
+    // QMessageBox::warning(NULL, tr("信息"), tr("打开串口失败"), QMessageBox::Ok);
 
     return false;
 }
@@ -54,7 +55,7 @@ bool COM::ClosePort() {
         if (portReady) {
             serialPort->close();
             portReady = false;
-            qDebug()<<"串口关闭成功";
+            qDebug() << "串口关闭成功";
             return true;
         } else {
             QMessageBox::warning(NULL, tr("错误"), tr("端口未开启"),
@@ -68,11 +69,14 @@ bool COM::ClosePort() {
 
 bool COM::SendMessageToPort(const QByteArray& data) {
     if (portReady) {
-        QByteArray dataBuffer = data;
-        serialPort->write(dataBuffer);
-        if (!serialPort->waitForBytesWritten()) {
-            errorHandle(QSerialPort::WriteError);
+        if (!data.isEmpty()) {
+            //  QByteArray dataBuffer = ;
+            serialPort->write(data);
+            if (!serialPort->waitForBytesWritten()) {
+                errorHandle(QSerialPort::WriteError);
+            }
         }
+
         return true;
     }
     QMessageBox::warning(NULL, tr("错误"), tr("端口还没有打开或配置"),
@@ -87,7 +91,7 @@ void COM::errorHandle(QSerialPort::SerialPortError error) {
         case QSerialPort::NoError:
             break;
         case QSerialPort::OpenError:
-            errorStr = tr("错误端口已打开");
+            errorStr = tr("错误串口已打开");
             break;
         case QSerialPort::WriteError:
             errorStr = tr("向串口写入数据出错");
@@ -95,7 +99,12 @@ void COM::errorHandle(QSerialPort::SerialPortError error) {
         case QSerialPort::ReadError:
             errorStr = tr("向串口读出数据出错");
             break;
+        case QSerialPort::PermissionError:
+            errorStr = tr("串口已经被占用");
+            break;
+
         default:
+            qDebug() << "Unknown error: QSerialPort::SerialPortError"<<error;
             errorStr = tr("未知错误");
     }
     if (!errorStr.isEmpty()) {
@@ -104,12 +113,10 @@ void COM::errorHandle(QSerialPort::SerialPortError error) {
     }
 }
 
-
-void COM::SendDataToMainwindow(){
-    QByteArray dataBuffer = serialPort->readAll(); 
+void COM::SendDataToMainwindow() {
+    QByteArray dataBuffer = serialPort->readAll();
     emit ReceiveData(dataBuffer);
     return;
 }
-
 
 volatile bool COM::portReady = false;

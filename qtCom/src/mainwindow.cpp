@@ -25,7 +25,11 @@ MainWindow::~MainWindow() {
     delete portInfo;
 }
 
-void MainWindow::on_refreshBtn_clicked() { refreshPortInfoToUI(); }
+void MainWindow::on_refreshBtn_clicked() { 
+    if (!usingPort){
+        refreshPortInfoToUI(); 
+    }else QMessageBox::information(this, tr("信息"), tr("请先关闭串口"));
+}
 
 /**
  * @brief 更新UI信息，更新可用的串口波特率等等
@@ -58,6 +62,7 @@ void MainWindow::refreshPortInfoToUI() {
  * @return {*}
  */
 void MainWindow::on_sendBtn_clicked() {
+    
     if (usingPort == false) {
         QMessageBox::warning(this, tr("警告"),
                              tr("还没有开启串口或初始化串口"));
@@ -78,6 +83,11 @@ void MainWindow::on_sendBtn_clicked() {
                 data = QByteArray::fromHex(
                     ui->lineEdit->text().simplified().toUtf8());
                 ui->lineEdit->setText(data.toHex().toUpper());
+                if (ui->sendNewlineChkBox->checkState() == Qt::Checked) {
+                    data.append("\r\n");
+                    qDebug() << "newline";
+
+                }
                 qDebug() << "going to send:" << data.toHex();
                 if (port != NULL && port->PortIsReady()) {
                     if (!port->SendMessageToPort(data)) {
@@ -89,6 +99,10 @@ void MainWindow::on_sendBtn_clicked() {
             }
             case Qt::Unchecked: {
                 QByteArray data = ui->lineEdit->text().toLocal8Bit();
+                if (ui->sendNewlineChkBox->checkState() == Qt::Checked) {
+                    data.append("\r\n");
+                    qDebug() << "newline";
+                }
                 qDebug() << "going to send:" << data;
                 if (port != NULL && port->PortIsReady()) {
                     if (!port->SendMessageToPort(data)) {

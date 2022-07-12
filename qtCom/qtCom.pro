@@ -23,6 +23,9 @@ HEADERS += \
     
 INCLUDEPATH += \include
 
+TRANSLATIONS += language_zh.ts \
+                language_en.ts
+
 
 FORMS += \
     forms/mainwindow.ui
