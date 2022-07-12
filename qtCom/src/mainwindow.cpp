@@ -11,6 +11,11 @@ MainWindow::MainWindow(QWidget *parent)
     portInfo = new MCOMINFO::comPortInfo();
     port = nullptr;
     logText = new QByteArray();
+    sendText = new QString();
+    QRegExp regExpHEX = QRegExp("[A-Fa-f0-9\\s]*");
+
+    validatorLineEditHEX = new QRegExpValidator(regExpHEX);
+
     refreshPortInfoToUI();
 }
 
@@ -24,7 +29,7 @@ void MainWindow::on_refreshBtn_clicked() { refreshPortInfoToUI(); }
 
 /**
  * @brief 更新UI信息，更新可用的串口波特率等等
- * @description: 
+ * @description:
  * @return {*}
  */
 void MainWindow::refreshPortInfoToUI() {
@@ -49,7 +54,7 @@ void MainWindow::refreshPortInfoToUI() {
 
 /**
  * @brief 向串口发送信息
- * @description: 
+ * @description:
  * @return {*}
  */
 void MainWindow::on_sendBtn_clicked() {
@@ -58,22 +63,54 @@ void MainWindow::on_sendBtn_clicked() {
                              tr("还没有开启串口或初始化串口"));
         return;
     } else {
-        QString dataToSend = ui->lineEdit->text();
-        qDebug() << "going to send:" << dataToSend;
-        if (port != NULL && port->PortIsReady()) {
-            if (!port->SendMessageToPort(dataToSend)) {
-                QMessageBox::warning(this, tr("错误"), tr("发送错误"));
-                return;
+        // QString dataToSend = ui->lineEdit->text();
+        // qDebug() << "going to send:" << dataToSend;
+        // if (port != NULL && port->PortIsReady()) {
+        //     if (!port->SendMessageToPort(dataToSend)) {
+        //         QMessageBox::warning(this, tr("错误"), tr("发送错误"));
+        //         return;
+        //     }
+        //     // ui->logEdit->append(dataToSend + "\n");
+        // }
+        switch (ui->hexSendCheckBox->checkState()) {
+            case Qt::Checked: {
+                QByteArray data;
+                data = QByteArray::fromHex(
+                    ui->lineEdit->text().simplified().toUtf8());
+                ui->lineEdit->setText(data.toHex().toUpper());
+                qDebug() << "going to send:" << data.toHex();
+                if (port != NULL && port->PortIsReady()) {
+                    if (!port->SendMessageToPort(data)) {
+                        QMessageBox::warning(this, tr("错误"), tr("发送错误"));
+                        return;
+                    }
+                    break;
+                }
             }
-            // ui->logEdit->append(dataToSend + "\n");
+            case Qt::Unchecked: {
+                QByteArray data = ui->lineEdit->text().toLocal8Bit();
+                qDebug() << "going to send:" << data;
+                if (port != NULL && port->PortIsReady()) {
+                    if (!port->SendMessageToPort(data)) {
+                        QMessageBox::warning(this, tr("错误"), tr("发送错误"));
+                        return;
+                    }
+                    break;
+                }
+                break;
+            }
+            default:
+                QMessageBox::warning(this, tr("错误"), tr("未成功发送"));
+                break;
         }
+
         return;
     }
 }
 
 /**
- * @brief 打开串口或关闭串口按钮槽函数，用于初始化串口并开启，或者关闭串口 
- * @description: 
+ * @brief 打开串口或关闭串口按钮槽函数，用于初始化串口并开启，或者关闭串口
+ * @description:
  * @return {*}
  */
 void MainWindow::on_openPortBtn_clicked() {
@@ -81,32 +118,26 @@ void MainWindow::on_openPortBtn_clicked() {
         PortInit();
 
         MCOM::SerialPortSetting portSettingInit;
-        portSettingInit.portName = 
-            ui->comPortSelect->currentText();
+        portSettingInit.portName = ui->comPortSelect->currentText();
         portSettingInit.baudRate =
-            MCOMINFO::comPortInfo::baudInfo
-                                    .find(ui->bandSelect->currentText())
-                                    .value();
-        portSettingInit.dataBits = 
-            MCOMINFO::comPortInfo::dataBitsInfo
-                                    .find(ui->dataBitsSelect->currentText())
-                                    .value();
+            MCOMINFO::comPortInfo::baudInfo.find(ui->bandSelect->currentText())
+                .value();
+        portSettingInit.dataBits = MCOMINFO::comPortInfo::dataBitsInfo
+                                       .find(ui->dataBitsSelect->currentText())
+                                       .value();
         portSettingInit.flowControl =
             MCOMINFO::comPortInfo::flowControlInfo
-                                    .find(ui->flowControlSelect->currentText())
-                                    .value();
-        portSettingInit.parity = 
-            MCOMINFO::comPortInfo::parityInfo
-                                    .find(ui->paritySelect->currentText())
-                                    .value();
-        portSettingInit.stopBits = 
-            MCOMINFO::comPortInfo::stopBitsInfo
-                                    .find(ui->stopBitsSelect->currentText())
-                                    .value();
+                .find(ui->flowControlSelect->currentText())
+                .value();
+        portSettingInit.parity = MCOMINFO::comPortInfo::parityInfo
+                                     .find(ui->paritySelect->currentText())
+                                     .value();
+        portSettingInit.stopBits = MCOMINFO::comPortInfo::stopBitsInfo
+                                       .find(ui->stopBitsSelect->currentText())
+                                       .value();
 
         if (port->SettingPort(portSettingInit)) {
             if (port->OpenPort()) {
-
                 usingPort = true;
                 ui->openPortBtn->setText(tr("关闭串口"));
                 ui->bandSelect->setDisabled(true);
@@ -170,7 +201,7 @@ bool MainWindow::PortInit() {
 
 /**
  * @brief 槽函数 从开启的串口处接受数据并写入到静态变量logText
- * @description: 
+ * @description:
  * @param {QByteArray} &data  串口接受到的数据
  * @return {*}
  */
@@ -185,7 +216,7 @@ void MainWindow::GetDataFromPort(const QByteArray &data) {
 
 /**
  * @brief 根据是否勾选了十六进制显示来切换串口数据信息显示方式
- * @description: 
+ * @description:
  * @param {int} arg1  复选框状态
  * @return {*}
  */
@@ -219,4 +250,85 @@ void MainWindow::on_hexCheckBox_stateChanged(int arg1) {
 
 void MainWindow::on_logEdit_textChanged() {
     // *logText =
+}
+
+void MainWindow::on_clearBtn_clicked() {
+    logText->clear();
+    ui->logEdit->clear();
+}
+
+void MainWindow::on_hexSendCheckBox_stateChanged(int arg1) {
+    switch (arg1) {
+        case Qt::Checked: {
+            // QString text = ;
+            qDebug() << "on_hexSendCheckBox_stateChanged" << arg1;
+            QString text = *sendText;
+            qDebug() << "lineEdit text：" << text;
+
+            ui->lineEdit->setValidator(validatorLineEditHEX);
+            ui->lineEdit->clear();
+
+            QByteArray data = text.toLocal8Bit();
+            ui->lineEdit->setText(data.toHex().toUpper());
+            // ui->lineEdit->
+            break;
+        }
+        case Qt::Unchecked: {
+            qDebug() << "on_hexSendCheckBox_stateChanged" << arg1;
+
+            // QString text;
+            // QByteArray data ;
+            // data = arg1.toUtf8();
+            // QTextCodec *tc = QTextCodec::codecForName("GBK");
+            // text = tc->toUnicode(data);
+            QString text = *sendText;
+            qDebug() << "lineEdit text：" << text;
+
+            ui->lineEdit->setValidator(0);
+            ui->lineEdit->clear();
+
+            // text.toLocal8Bit();
+            ui->lineEdit->setText(text);
+            break;
+        }
+        default:
+            return;
+    }
+}
+
+void MainWindow::on_lineEdit_textEdited(const QString &arg1) {
+    switch (ui->hexSendCheckBox->checkState()) {
+        case Qt::Checked: {
+            // QString text = arg1;
+            // qDebug() << "lineEdit text："<<text;
+            // text.toLocal8Bit();
+            // ui->lineEdit->setText(text);
+            // // QRegExp regExp = QRegExp("[A-Za-z0-9]+");
+
+            // // QValidator *validatorName = new QRegExpValidator(regExp);
+            // // ui->lineEdit->setValidator(validatorName);
+            // // ui->lineEdit->
+            QString text;
+            QByteArray data;
+
+            data = QByteArray::fromHex(arg1.simplified().toUtf8());
+            qDebug() << data.toHex();
+
+            QTextCodec *tc = QTextCodec::codecForName("GBK");
+            text = tc->toUnicode(data);
+            *sendText = text;
+            qDebug() << "now send text::" << *sendText;
+            // text = arg1
+
+            break;
+        }
+        case Qt::Unchecked: {
+            //             QString text = arg1;
+            // qDebug() << "lineEdit text："<<text;
+            *sendText = arg1;
+            break;
+        }
+        default:
+            return;
+    }
 }

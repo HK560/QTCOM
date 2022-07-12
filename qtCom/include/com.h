@@ -41,7 +41,7 @@ class COM : public QObject {
     bool SettingPort(const SerialPortSetting& settingStruct);
     bool OpenPort();
     bool ClosePort();
-    bool SendMessageToPort(const QString& data);
+    bool SendMessageToPort(const QByteArray& data);
     bool PortIsReady() { return (portReady && serialPort->isOpen()); }
    public slots:
     void errorHandle(QSerialPort::SerialPortError error);

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QValidator>
 #include "comportinfo.h"
 #include "com.h"
 QT_BEGIN_NAMESPACE
@@ -32,6 +33,12 @@ private slots:
 
     void on_logEdit_textChanged();
 
+    void on_clearBtn_clicked();
+
+    void on_hexSendCheckBox_stateChanged(int arg1);
+
+    void on_lineEdit_textEdited(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     MCOMINFO::comPortInfo *portInfo;
@@ -41,6 +48,12 @@ private:
     volatile static bool usingPort; // 标记是否正在使用串口
 
     QByteArray* logText;
+
+    QString* sendText;
+
+    QValidator *validatorLineEditHEX;
+
+
 
 };
 #endif // MAINWINDOW_H

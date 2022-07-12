@@ -66,9 +66,9 @@ bool COM::ClosePort() {
     return false;
 }
 
-bool COM::SendMessageToPort(const QString& data) {
+bool COM::SendMessageToPort(const QByteArray& data) {
     if (portReady) {
-        QByteArray dataBuffer = data.toLocal8Bit();
+        QByteArray dataBuffer = data;
         serialPort->write(dataBuffer);
         if (!serialPort->waitForBytesWritten()) {
             errorHandle(QSerialPort::WriteError);

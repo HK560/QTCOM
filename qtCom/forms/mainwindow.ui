@@ -30,7 +30,7 @@
    <widget class="QCheckBox" name="hexCheckBox">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>180</x>
       <y>230</y>
       <width>111</width>
       <height>22</height>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>270</y>
+      <y>260</y>
       <width>261</width>
       <height>23</height>
      </rect>
@@ -84,6 +84,32 @@
     </property>
     <property name="text">
      <string>刷新</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearBtn">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>230</y>
+      <width>41</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>清空</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="hexSendCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>280</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>以十六进制发送</string>
     </property>
    </widget>
    <widget class="QWidget" name="">
