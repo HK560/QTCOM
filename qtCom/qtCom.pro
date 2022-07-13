@@ -9,7 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    mmessagebox.cpp \
+    src/mmessagebox.cpp \
     src/ListenPortThread.cpp \
     src/com.cpp \
     src/comportinfo.cpp \
@@ -21,12 +21,12 @@ HEADERS += \
     include/com.h \
     include/mainwindow.h \
     include/comportinfo.h \
-    mmessagebox.h
+    include/mmessagebox.h
     
 INCLUDEPATH += \include
 
-TRANSLATIONS += language_zh.ts \
-                language_en.ts
+TRANSLATIONS += ress/language_zh.ts \
+                ress/language_en.ts
 
 
 FORMS += \
@@ -38,4 +38,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    res.qrc
+    ress/res.qrc
+
+DISTFILES += \
+    ress/language_en.qm \
+    ress/style.qss

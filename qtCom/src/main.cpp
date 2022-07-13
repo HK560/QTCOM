@@ -10,14 +10,14 @@ int main(int argc, char *argv[]) {
     if (QLocale::system().name() != "zh_CN") {
         qDebug() << "nochinese language";
         QTranslator *qtTranslatorBase = new QTranslator;
-        if (qtTranslatorBase->load("../language_en.qm")) {
+        if (qtTranslatorBase->load("../ress/language_en.qm")) {
             a.installTranslator(qtTranslatorBase);
             qDebug() << "loaded ";
         } else {
             qDebug() << "unloaded ";
         }
     }
-QFile qss("../style.qss");
+QFile qss("../ress/style.qss");
 qss.open(QFile::ReadOnly);
 a.setStyleSheet(qss.readAll());
 qss.close();
