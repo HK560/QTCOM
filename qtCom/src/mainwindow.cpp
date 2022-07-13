@@ -314,8 +314,9 @@ void MainWindow::on_lineEdit_textEdited(const QString &arg1) {
             data = QByteArray::fromHex(arg1.simplified().toUtf8());
             qDebug() << data.toHex();
 
-            QTextCodec *tc = QTextCodec::codecForName("GBK");
-            text = tc->toUnicode(data);
+            // QTextCodec *tc = QTextCodec::codecForName("GBK");
+            // text = tc->toUnicode(data);
+            text = QString::fromUtf8(data);
             *sendText = text;
             qDebug() << "now send text::" << *sendText;
             // text = arg1

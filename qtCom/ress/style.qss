@@ -1,46 +1,27 @@
-QWidget#centralwidget{
-    background-color: #c3f6ff;
-    border-top-left-radius:15px;
-    border-top-right-radius:15px;
-    border-bottom-left-radius:15px;
-    border-bottom-right-radius:15px;
-    /* border-image: url(:/bg/QSS_IMG/720p.jpg) */
-    /* background-image: url(:/bg/QSS_IMG/720p.jpg); */
-    
 
-}
+/* QWidget#centralwidget{
+    background-color: rgb(67, 94, 134);
+    border-radius: 15px;
+} */
 QWidget{
     /* background-color: #48a5fd; */
-    border-top-left-radius:15px;
-    border-top-right-radius:15px;
-    border-bottom-left-radius:15px;
-    border-bottom-right-radius:15px;
-    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    border-radius: 15px;
     font-family:Microsoft Yahei,sans-serif;
     outline: none;
 }
-/* QMessageBox QFrame{
-    border-top-left-radius:15px;
-    border-top-right-radius:15px;
-    border-bottom-left-radius:15px;
-    border-bottom-right-radius:15px;
-    background-color: #ad1515;
-} */
+
+QWidget#centralwidget{
+    background-color: #c3f6ff;
+    border-radius: 15px;
+    /* border-image: url(:/bg/QSS_IMG/720p.jpg) */
+}
 
 QMessageBox  {
     border-radius: 15px;
-    /* border-top-left-radius:15px;
-    border-top-right-radius:15px;
-    border-bottom-left-radius:15px;
-    border-bottom-right-radius:15px; */
-    /* background-color: #333333; */
+    background-color: rgb(67, 94, 134);
+
 }
 
-QMessageBox  {
-    background-color: rgb(67, 94, 134);
-    /* border-image: url(:/bg/QSS_IMG/720p.jpg) */
-    
-}
 QMessageBox QLabel {
     color: rgb(255, 255, 255);
 }
