@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    mmessagebox.cpp \
     src/ListenPortThread.cpp \
     src/com.cpp \
     src/comportinfo.cpp \
@@ -19,7 +20,8 @@ HEADERS += \
     include/ListenPortThread.h \
     include/com.h \
     include/mainwindow.h \
-    include/comportinfo.h
+    include/comportinfo.h \
+    mmessagebox.h
     
 INCLUDEPATH += \include
 
@@ -34,3 +36,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res.qrc

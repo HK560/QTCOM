@@ -23,7 +23,8 @@
 			"*.tcc": "cpp",
 			"fstream": "cpp",
 			"sstream": "cpp",
-			"qobject": "cpp"
+			"qobject": "cpp",
+			"new": "cpp"
 		}
 	}
 }

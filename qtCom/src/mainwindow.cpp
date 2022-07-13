@@ -2,12 +2,26 @@
 
 #include "include/com.h"
 #include "ui_mainwindow.h"
+#include <QAbstractItemView>
+#include <QTreeView>
+#include "./mmessagebox.h"
 
 volatile bool MainWindow::usingPort = false;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint | 
+               Qt::WindowMinimizeButtonHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+    // QAbstractItemModel ab;
+    // ab.win
+    // QTreeView *ve = new QTreeView;
+    ui->bandSelect->view()->window()->setWindowFlags(Qt::Popup | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    ui->bandSelect->view()->window()->setAttribute(Qt::WA_TranslucentBackground,true);
+    
+    ui->statusbar->hide();
+
     portInfo = new MCOMINFO::comPortInfo();
     port = nullptr;
     logText = new QByteArray();
@@ -64,19 +78,10 @@ void MainWindow::refreshPortInfoToUI() {
 void MainWindow::on_sendBtn_clicked() {
     
     if (usingPort == false) {
-        QMessageBox::warning(this, tr("警告"),
+        MMessagebox::warning(this, tr("警告"),
                              tr("还没有开启串口或初始化串口"));
         return;
     } else {
-        // QString dataToSend = ui->lineEdit->text();
-        // qDebug() << "going to send:" << dataToSend;
-        // if (port != NULL && port->PortIsReady()) {
-        //     if (!port->SendMessageToPort(dataToSend)) {
-        //         QMessageBox::warning(this, tr("错误"), tr("发送错误"));
-        //         return;
-        //     }
-        //     // ui->logEdit->append(dataToSend + "\n");
-        // }
         switch (ui->hexSendCheckBox->checkState()) {
             case Qt::Checked: {
                 QByteArray data;
@@ -86,7 +91,6 @@ void MainWindow::on_sendBtn_clicked() {
                 if (ui->sendNewlineChkBox->checkState() == Qt::Checked) {
                     data.append("\r\n");
                     qDebug() << "newline";
-
                 }
                 qDebug() << "going to send:" << data.toHex();
                 if (port != NULL && port->PortIsReady()) {
@@ -117,7 +121,6 @@ void MainWindow::on_sendBtn_clicked() {
                 QMessageBox::warning(this, tr("错误"), tr("未成功发送"));
                 break;
         }
-
         return;
     }
 }
@@ -263,7 +266,6 @@ void MainWindow::on_hexCheckBox_stateChanged(int arg1) {
 }
 
 void MainWindow::on_logEdit_textChanged() {
-    // *logText =
 }
 
 void MainWindow::on_clearBtn_clicked() {
@@ -289,19 +291,12 @@ void MainWindow::on_hexSendCheckBox_stateChanged(int arg1) {
         }
         case Qt::Unchecked: {
             qDebug() << "on_hexSendCheckBox_stateChanged" << arg1;
-
-            // QString text;
-            // QByteArray data ;
-            // data = arg1.toUtf8();
-            // QTextCodec *tc = QTextCodec::codecForName("GBK");
-            // text = tc->toUnicode(data);
             QString text = *sendText;
             qDebug() << "lineEdit text：" << text;
 
             ui->lineEdit->setValidator(0);
             ui->lineEdit->clear();
 
-            // text.toLocal8Bit();
             ui->lineEdit->setText(text);
             break;
         }
@@ -313,15 +308,6 @@ void MainWindow::on_hexSendCheckBox_stateChanged(int arg1) {
 void MainWindow::on_lineEdit_textEdited(const QString &arg1) {
     switch (ui->hexSendCheckBox->checkState()) {
         case Qt::Checked: {
-            // QString text = arg1;
-            // qDebug() << "lineEdit text："<<text;
-            // text.toLocal8Bit();
-            // ui->lineEdit->setText(text);
-            // // QRegExp regExp = QRegExp("[A-Za-z0-9]+");
-
-            // // QValidator *validatorName = new QRegExpValidator(regExp);
-            // // ui->lineEdit->setValidator(validatorName);
-            // // ui->lineEdit->
             QString text;
             QByteArray data;
 
@@ -337,8 +323,6 @@ void MainWindow::on_lineEdit_textEdited(const QString &arg1) {
             break;
         }
         case Qt::Unchecked: {
-            //             QString text = arg1;
-            // qDebug() << "lineEdit text："<<text;
             *sendText = arg1;
             break;
         }
@@ -346,3 +330,45 @@ void MainWindow::on_lineEdit_textEdited(const QString &arg1) {
             return;
     }
 }
+
+void MainWindow::on_exitBtn_clicked()
+{
+    if(usingPort == true){
+        port->ClosePort();
+    }
+    exit(0);
+}
+
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        m_bDrag = true;
+        //获得鼠标的初始位置
+        mouseStartPoint = event->globalPos();
+        //mouseStartPoint = event->pos();
+        //获得窗口的初始位置
+        windowTopLeftPoint = this->frameGeometry().topLeft();
+    }
+}
+ 
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if(m_bDrag)
+    {
+        //获得鼠标移动的距离
+        QPoint distance = event->globalPos() - mouseStartPoint;
+        //改变窗口的位置
+        this->move(windowTopLeftPoint + distance);
+    }
+}
+ 
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        m_bDrag = false;
+    }
+}
+ 
