@@ -27,6 +27,10 @@ QMessageBox QLabel {
 }
 
 
+QLabel#mainlabel,QLabel#labelHk560{
+    font-size: 20px;
+    font-style: italic;
+}
 
 QPushButton#exitBtn:hover{
     qproperty-icon: url(:/bg/QSS_IMG/exit.png);
